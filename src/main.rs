@@ -2,7 +2,7 @@ use std::fs::read_dir;
 use std::path::Path;
 
 fn main() {
-    let path_to_file: &Path = Path::new(".");
+    let path_to_file: &Path = Path::new("test_folder");
 
     let file_size: u64 = calculate_size(path_to_file);
     println!("{} Bytes", file_size);
