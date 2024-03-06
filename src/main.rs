@@ -14,8 +14,8 @@ fn main(){
             _ => {println!("too many arguments!!!! exiting..."); return;}
         }
     );
-    if !path_to_file.exists() {
-        println!("the specified directory or file does not exist");
+    if !path_to_file.exists() || path_to_file.is_symlink() {
+        println!("the specified directory or file does not exist / is a symlink");
         return;
     }
 
@@ -27,28 +27,17 @@ fn main(){
 }
 
 fn calculate_size(path: &Path) -> u64 {
-    if !path.exists() { return 0; }
+    if !path.exists() || path.is_symlink() { return 0; }
 
-    let mut sum: u64 = 0;
+    let mut sum: u64 = path.metadata().unwrap().len();
     if path.is_dir() {
-        match read_dir(path) {
-            Ok(unwrapped_dir) => {
-                for entry in unwrapped_dir {
-                    if let Ok(dir_entry) = entry {
-                        let buf = dir_entry.path();
-                        let entry_path: &Path = buf.as_path();
-                        sum += calculate_size(entry_path);
-                    }
-                }
-            }, _ => ()
+        if let Some(unwrapped_dir) = read_dir(path).ok() {
+            for entry in unwrapped_dir {
+                let buf = entry.unwrap().path();
+                let entry_path: &Path = buf.as_path();
+                sum += calculate_size(entry_path);
+            }
         }
-        sum += path.metadata().unwrap().len();
-    } else {
-        match path.metadata() {
-            Ok(file_metadata) => if !file_metadata.is_symlink() {
-                sum += file_metadata.len()
-            }, _ => ()
-        };
     }
 
     sum

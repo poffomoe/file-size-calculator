@@ -19,4 +19,5 @@ If no path was specified, the program will calculate the size of current directo
 
 ## Issues
 
-1. **IT WILL CRASH IF THERE IS TOO MANY LEVELS OF SYMLINKS AND I HAVE NO IDEA HOW TO FIX IT :D**
+1. **~~IT WILL CRASH IF THERE IS TOO MANY LEVELS OF SYMLINKS AND I HAVE NO IDEA HOW TO FIX IT :D~~** i fixed it pogchamp
+2. `du` is faster :'(
