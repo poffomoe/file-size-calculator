@@ -15,7 +15,6 @@ You can calculate the **size of a file or directory** *(or file)* with it! **Rev
 `file-size-calculator /path/to/directory/or/file`
 
 If no path was specified, the program will calculate the size of current directory.
-<p style="opacity: 0.3"><i>i made it arg based, yay.</i></p>
 
 ## Issues
 
