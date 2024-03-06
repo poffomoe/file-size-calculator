@@ -8,11 +8,15 @@ I think it does better job at displaying actual size of a directory than Dolphin
 
 ## Features
 
-You can calculate the **size of a file or directory** with it! **Revolutionary!!!** 
+You can calculate the **size of a file or directory** *(or file)* with it! **Revolutionary!!!** 
 
 ## How to use
 
-I don't know why you would need a tutorial.
-1. Put your path in `Path::new("{your_path}")`.
-2. `cargo run` or `rustc ./src/main.rs`, assuming you're in project root.
-<p style="opacity: 0.3"><i>i could make it a program that takes path as an argument but idc really. maybe will do that in the future.</i></p>
+`file-size-calculator /path/to/directory/or/file`
+
+If no path was specified, the program will calculate the size of current directory.
+<p style="opacity: 0.3"><i>i made it arg based, yay.</i></p>
+
+## Issues
+
+1. **IT WILL CRASH IF THERE IS TOO MANY LEVELS OF SYMLINKS AND I HAVE NO IDEA HOW TO FIX IT :D**

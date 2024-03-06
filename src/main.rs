@@ -1,8 +1,23 @@
 use std::fs::read_dir;
 use std::path::Path;
+use std::env::args;
 
-fn main() {
-    let path_to_file: &Path = Path::new("test_folder");
+fn main(){
+    let args: Vec<String> = args().collect();
+
+    let path_to_file: &Path = Path::new(
+        match args.len() {
+            0 => {println!("0 args? how?.."); return;},
+            1 => ".",
+            2 => args[1].as_str(),
+
+            _ => {println!("too many arguments!!!! exiting..."); return;}
+        }
+    );
+    if !path_to_file.exists() {
+        println!("the specified directory or file does not exist");
+        return;
+    }
 
     let file_size: u64 = calculate_size(path_to_file);
     println!("{} Bytes", file_size);
@@ -12,10 +27,8 @@ fn main() {
 }
 
 fn calculate_size(path: &Path) -> u64 {
-    if path.to_str().unwrap() == "" {
-        panic!("the path is empty")
-    };
-    
+    if !path.exists() { return 0; }
+
     let mut sum: u64 = 0;
     if path.is_dir() {
         match read_dir(path) {
@@ -25,18 +38,16 @@ fn calculate_size(path: &Path) -> u64 {
                         let buf = dir_entry.path();
                         let entry_path: &Path = buf.as_path();
                         sum += calculate_size(entry_path);
-                    } else {
-                        sum += 0;
                     }
                 }
-            },
-            Err(_) => sum += 0
+            }, _ => ()
         }
         sum += path.metadata().unwrap().len();
     } else {
         match path.metadata() {
-            Ok(file_metadata) => sum += file_metadata.len(),
-            Err(the_error) => {panic!("[Path: {}] {}", path.to_str().unwrap(), the_error)}
+            Ok(file_metadata) => if !file_metadata.is_symlink() {
+                sum += file_metadata.len()
+            }, _ => ()
         };
     }
 
